@@ -96,7 +96,16 @@
         "kind": 2,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "def chat():\n    if \"user\" not in session:\n        flash(\"Először jelentkezz be!\", \"error\")\n        return redirect(url_for(\"index\"))\n    return render_template(\"chat.html\", user=session[\"user\"])\n@app.route(\"/logout\")\ndef logout():\n    session.pop(\"user\", None)\n    flash(\"Sikeres kijelentkezés.\", \"success\")\n    return redirect(url_for(\"index\"))",
+        "peekOfCode": "def chat():\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    if \"user\" not in session:\n        flash(\"Először jelentkezz be!\", \"error\")\n        return redirect(url_for(\"index\"))\n    cur.execute(f\"select message, sender FROM messages\")\n    uzenetek = cur.fetchall()\n    for i in uzenetek:\n        message = i[0]",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "send_message",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def send_message():\n    kuldo = session[\"user\"]\n    uzenet = request.form[\"message_html\"]\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    ins = cur.execute(f\"insert into messages (message, sender) values ('{uzenet}', '{kuldo}')\")\n    con.commit()\n    return redirect(url_for(\"chat\"))\n@app.route(\"/logout\")\ndef logout():",
         "detail": "main",
         "documentation": {}
     },
@@ -114,7 +123,7 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "app = Flask(__name__)\napp.secret_key = \"szupertitkoskulcs\"  # Ezt cseréld le egy erősebb kulcsra!\ncon = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass",
+        "peekOfCode": "app = Flask(__name__)\napp.secret_key = \"szupertitkoskulcs\"  # Ezt cseréld le egy erősebb kulcsra!\ncon = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    cur.execute(\"CREATE TABLE messages(message, sender)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:",
         "detail": "main",
         "documentation": {}
     },
@@ -123,7 +132,7 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "app.secret_key = \"szupertitkoskulcs\"  # Ezt cseréld le egy erősebb kulcsra!\ncon = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó",
+        "peekOfCode": "app.secret_key = \"szupertitkoskulcs\"  # Ezt cseréld le egy erősebb kulcsra!\ncon = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    cur.execute(\"CREATE TABLE messages(message, sender)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass",
         "detail": "main",
         "documentation": {}
     },
@@ -132,7 +141,7 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "con = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó\n# Főoldal (index)",
+        "peekOfCode": "con = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    cur.execute(\"CREATE TABLE messages(message, sender)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó",
         "detail": "main",
         "documentation": {}
     },
@@ -141,7 +150,7 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "cur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó\n# Főoldal (index)\n@app.route(\"/\")",
+        "peekOfCode": "cur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    cur.execute(\"CREATE TABLE messages(message, sender)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó\n# Főoldal (index)",
         "detail": "main",
         "documentation": {}
     }

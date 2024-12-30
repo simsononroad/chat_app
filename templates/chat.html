@@ -6,10 +6,13 @@
     <title>Chat</title>
 </head>
 <body>
-    <form action="/add_message" method="post">
-        <input type="text" placeholder="Üzenet" name="message"><br>
+    <form action="/send_message" method="post">
+        <input type="text" placeholder="Üzenet" name="message_html"><br>
         <input type="submit" value="✈️">
         <a href="/logout">Kijelentkezés!</a>
     </form>
+    <div>
+        {{ kuldo }}: {{ message }}
+    </div>
 </body>
 </html>

@@ -10,6 +10,7 @@ con = sqlite3.connect("data.db")
 cur = con.cursor()
 try:
     cur.execute("CREATE TABLE login_name(id INT PRIMARY KEY ,name)")
+    cur.execute("CREATE TABLE messages(message, sender)")
     ins = cur.execute(f"insert into login_name (name) values ('admin')")
     con.commit()
 
@@ -54,10 +55,32 @@ def login():
 
 @app.route("/chat")
 def chat():
+    con = sqlite3.connect("data.db")
+    cur = con.cursor()
     if "user" not in session:
         flash("Először jelentkezz be!", "error")
         return redirect(url_for("index"))
-    return render_template("chat.html", user=session["user"])
+    
+    cur.execute(f"select message, sender FROM messages")
+    uzenetek = cur.fetchall()
+    
+    for i in uzenetek:
+        message = i[0]
+        kuldo = i[1]
+        return render_template("chat.html", user=session["user"], message=message, kuldo=kuldo)
+    
+    
+
+
+@app.route("/send_message", methods=["POST"])
+def send_message():
+    kuldo = session["user"]
+    uzenet = request.form["message_html"]
+    con = sqlite3.connect("data.db")
+    cur = con.cursor()
+    ins = cur.execute(f"insert into messages (message, sender) values ('{uzenet}', '{kuldo}')")
+    con.commit()
+    return redirect(url_for("chat"))
 
 
 @app.route("/logout")
