@@ -1,0 +1,148 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "url_for",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "flash",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "session",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "hashlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "hashlib",
+        "description": "hashlib",
+        "detail": "hashlib",
+        "documentation": {}
+    },
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "index",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def index():\n    return render_template(\"index.html\")\n@app.route(\"/login\", methods=[\"POST\"])\ndef login():\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    username = request.form[\"username\"]\n    cur.execute(f\"select name FROM login_name\")\n    name = cur.fetchall()\n    nevek = \"\"",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "login",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def login():\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    username = request.form[\"username\"]\n    cur.execute(f\"select name FROM login_name\")\n    name = cur.fetchall()\n    nevek = \"\"\n    for names in name:\n        names = names[0]\n        nevek += f\"{names}, \"",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "chat",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def chat():\n    if \"user\" not in session:\n        flash(\"Először jelentkezz be!\", \"error\")\n        return redirect(url_for(\"index\"))\n    return render_template(\"chat.html\", user=session[\"user\"])\n@app.route(\"/logout\")\ndef logout():\n    session.pop(\"user\", None)\n    flash(\"Sikeres kijelentkezés.\", \"success\")\n    return redirect(url_for(\"index\"))",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "logout",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def logout():\n    session.pop(\"user\", None)\n    flash(\"Sikeres kijelentkezés.\", \"success\")\n    return redirect(url_for(\"index\"))\nif __name__ == \"__main__\":\n    app.run(debug=True)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "app = Flask(__name__)\napp.secret_key = \"szupertitkoskulcs\"  # Ezt cseréld le egy erősebb kulcsra!\ncon = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "app.secret_key",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "app.secret_key = \"szupertitkoskulcs\"  # Ezt cseréld le egy erősebb kulcsra!\ncon = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "con",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "con = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó\n# Főoldal (index)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "cur",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "cur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó\n# Főoldal (index)\n@app.route(\"/\")",
+        "detail": "main",
+        "documentation": {}
+    }
+]
