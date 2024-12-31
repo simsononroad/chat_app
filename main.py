@@ -2,6 +2,14 @@ from flask import Flask, request, render_template, redirect, url_for, flash, ses
 #import database
 import hashlib
 import sqlite3
+from form import belepes
+from google_keys import *
+from google.cloud import recaptchaenterprise_v1
+from google.cloud.recaptchaenterprise_v1 import Assessment
+from test import uzenet
+import requests
+
+GOOGLE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 
 app = Flask(__name__)
 app.secret_key = "szupertitkoskulcs"  # Ezt cseréld le egy erősebb kulcsra!
@@ -25,14 +33,21 @@ except:
 # Főoldal (index)
 @app.route("/")
 def index():
-    return render_template("index.html")
+    form = belepes()
+    return render_template("index.html", site_key=GOOGLE_RECAPTCHA_SITE_KEY, form=form)
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["POST", "GET"])
 def login():
+    form = belepes()
     con = sqlite3.connect("data.db")
     cur = con.cursor()
     username = request.form["username"]
 
+
+    if form.validate_on_submit():
+        secret_response = request.form["g-recaptcha-response"]
+        verify_response = requests.post(url=f"{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={secret_response}").json
+        print(verify_response)
     cur.execute(f"select name FROM login_name")
     name = cur.fetchall()
     nevek = ""
@@ -42,6 +57,7 @@ def login():
     
     if username in nevek:
         print("nem lehet bejelentkezni")
+        error = "Van már ilyen nevű felhasználó"
         return redirect(url_for("index"))
     else:
         ins = cur.execute(f"insert into login_name (name) values ('{username}')")
@@ -63,11 +79,14 @@ def chat():
     
     cur.execute(f"select message, sender FROM messages")
     uzenetek = cur.fetchall()
-    
+    uzenet_n = ""
     for i in uzenetek:
-        message = i[0]
-        kuldo = i[1]
-        return render_template("chat.html", user=session["user"], message=message, kuldo=kuldo)
+        message1 = i[0]
+        kuldo1 = i[1]
+        uzenet_n += f"{kuldo1}: {message1} <br>"
+
+
+    return render_template("chat.html", user=session["user"], uzenet_n=uzenet_n)
     
     
 

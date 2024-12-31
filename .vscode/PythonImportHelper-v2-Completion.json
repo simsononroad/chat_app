@@ -1,5 +1,14 @@
 [
     {
+        "label": "flask",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "flask",
+        "description": "flask",
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
         "label": "Flask",
         "importPath": "flask",
         "description": "flask",
@@ -56,6 +65,22 @@
         "documentation": {}
     },
     {
+        "label": "FlaskForm",
+        "importPath": "flask_wtf",
+        "description": "flask_wtf",
+        "isExtraImport": true,
+        "detail": "flask_wtf",
+        "documentation": {}
+    },
+    {
+        "label": "StringField",
+        "importPath": "wtforms",
+        "description": "wtforms",
+        "isExtraImport": true,
+        "detail": "wtforms",
+        "documentation": {}
+    },
+    {
         "label": "hashlib",
         "kind": 6,
         "isExtraImport": true,
@@ -74,11 +99,87 @@
         "documentation": {}
     },
     {
+        "label": "belepes",
+        "importPath": "form",
+        "description": "form",
+        "isExtraImport": true,
+        "detail": "form",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "google_keys",
+        "description": "google_keys",
+        "isExtraImport": true,
+        "detail": "google_keys",
+        "documentation": {}
+    },
+    {
+        "label": "recaptchaenterprise_v1",
+        "importPath": "google.cloud",
+        "description": "google.cloud",
+        "isExtraImport": true,
+        "detail": "google.cloud",
+        "documentation": {}
+    },
+    {
+        "label": "Assessment",
+        "importPath": "google.cloud.recaptchaenterprise_v1",
+        "description": "google.cloud.recaptchaenterprise_v1",
+        "isExtraImport": true,
+        "detail": "google.cloud.recaptchaenterprise_v1",
+        "documentation": {}
+    },
+    {
+        "label": "uzenet",
+        "importPath": "test",
+        "description": "test",
+        "isExtraImport": true,
+        "detail": "test",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "belepes",
+        "kind": 6,
+        "importPath": "form",
+        "description": "form",
+        "peekOfCode": "class belepes(FlaskForm):\n    name = StringField(\n        name='username',\n        render_kw={'placeholder': 'Felhasználónév'}\n    )",
+        "detail": "form",
+        "documentation": {}
+    },
+    {
+        "label": "GOOGLE_RECAPTCHA_SITE_KEY",
+        "kind": 5,
+        "importPath": "google_keys",
+        "description": "google_keys",
+        "peekOfCode": "GOOGLE_RECAPTCHA_SITE_KEY = \"6Letj6oqAAAAACLdXkPNlwkHG1TBBO0GtNXJFuU8\"\nGOOGLE_RECAPTCHA_SECRET_KEY = \"6Letj6oqAAAAAF3QDh0BEs-rLDZyk5P2VsWC23KK\"",
+        "detail": "google_keys",
+        "documentation": {}
+    },
+    {
+        "label": "GOOGLE_RECAPTCHA_SECRET_KEY",
+        "kind": 5,
+        "importPath": "google_keys",
+        "description": "google_keys",
+        "peekOfCode": "GOOGLE_RECAPTCHA_SECRET_KEY = \"6Letj6oqAAAAAF3QDh0BEs-rLDZyk5P2VsWC23KK\"",
+        "detail": "google_keys",
+        "documentation": {}
+    },
+    {
         "label": "index",
         "kind": 2,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "def index():\n    return render_template(\"index.html\")\n@app.route(\"/login\", methods=[\"POST\"])\ndef login():\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    username = request.form[\"username\"]\n    cur.execute(f\"select name FROM login_name\")\n    name = cur.fetchall()\n    nevek = \"\"",
+        "peekOfCode": "def index():\n    form = belepes()\n    return render_template(\"index.html\", site_key=GOOGLE_RECAPTCHA_SITE_KEY, form=form)\n@app.route(\"/login\", methods=[\"POST\", \"GET\"])\ndef login():\n    form = belepes()\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    username = request.form[\"username\"]\n    if form.validate_on_submit():",
         "detail": "main",
         "documentation": {}
     },
@@ -87,7 +188,7 @@
         "kind": 2,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "def login():\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    username = request.form[\"username\"]\n    cur.execute(f\"select name FROM login_name\")\n    name = cur.fetchall()\n    nevek = \"\"\n    for names in name:\n        names = names[0]\n        nevek += f\"{names}, \"",
+        "peekOfCode": "def login():\n    form = belepes()\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    username = request.form[\"username\"]\n    if form.validate_on_submit():\n        secret_response = request.form[\"g-recaptcha-response\"]\n        verify_response = requests.post(url=f\"{GOOGLE_VERIFY_URL}?secret={GOOGLE_RECAPTCHA_SECRET_KEY}&response={secret_response}\").json\n        print(verify_response)\n    cur.execute(f\"select name FROM login_name\")",
         "detail": "main",
         "documentation": {}
     },
@@ -96,7 +197,7 @@
         "kind": 2,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "def chat():\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    if \"user\" not in session:\n        flash(\"Először jelentkezz be!\", \"error\")\n        return redirect(url_for(\"index\"))\n    cur.execute(f\"select message, sender FROM messages\")\n    uzenetek = cur.fetchall()\n    for i in uzenetek:\n        message = i[0]",
+        "peekOfCode": "def chat():\n    con = sqlite3.connect(\"data.db\")\n    cur = con.cursor()\n    if \"user\" not in session:\n        flash(\"Először jelentkezz be!\", \"error\")\n        return redirect(url_for(\"index\"))\n    cur.execute(f\"select message, sender FROM messages\")\n    uzenetek = cur.fetchall()\n    uzenet_n = \"\"\n    for i in uzenetek:",
         "detail": "main",
         "documentation": {}
     },
@@ -115,6 +216,15 @@
         "importPath": "main",
         "description": "main",
         "peekOfCode": "def logout():\n    session.pop(\"user\", None)\n    flash(\"Sikeres kijelentkezés.\", \"success\")\n    return redirect(url_for(\"index\"))\nif __name__ == \"__main__\":\n    app.run(debug=True)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "GOOGLE_VERIFY_URL",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "GOOGLE_VERIFY_URL = \"https://www.google.com/recaptcha/api/siteverify\"\napp = Flask(__name__)\napp.secret_key = \"szupertitkoskulcs\"  # Ezt cseréld le egy erősebb kulcsra!\ncon = sqlite3.connect(\"data.db\")\ncur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    cur.execute(\"CREATE TABLE messages(message, sender)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()",
         "detail": "main",
         "documentation": {}
     },
@@ -152,6 +262,24 @@
         "description": "main",
         "peekOfCode": "cur = con.cursor()\ntry:\n    cur.execute(\"CREATE TABLE login_name(id INT PRIMARY KEY ,name)\")\n    cur.execute(\"CREATE TABLE messages(message, sender)\")\n    ins = cur.execute(f\"insert into login_name (name) values ('admin')\")\n    con.commit()\nexcept:\n    pass\n# Előre meghatározott felhasználónév és jelszó\n# Főoldal (index)",
         "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "tuples",
+        "kind": 5,
+        "importPath": "test",
+        "description": "test",
+        "peekOfCode": "tuples = [('szia', 'asd'), ('hogy vagy', 'asd'), ('szia', 'asd'), ('hogy vagyztok?', 'dani'), ('jól. te?', 'kisgyerek'), ('én is', 'eszti'), ('az fasza', 'kisgyerek')]\nuzenet = \"\"\nfor i in tuples:\n    message = i[0]\n    kuldo = i[1]\n    uzenet += f\"{kuldo}: {message}\\n\"\n    print(\"=======\")\nprint(uzenet)",
+        "detail": "test",
+        "documentation": {}
+    },
+    {
+        "label": "uzenet",
+        "kind": 5,
+        "importPath": "test",
+        "description": "test",
+        "peekOfCode": "uzenet = \"\"\nfor i in tuples:\n    message = i[0]\n    kuldo = i[1]\n    uzenet += f\"{kuldo}: {message}\\n\"\n    print(\"=======\")\nprint(uzenet)",
+        "detail": "test",
         "documentation": {}
     }
 ]

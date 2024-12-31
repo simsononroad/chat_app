@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat - login</title>
+    
 </head>
 <body>
-    <form action="/login" method="post">
-        <input type="text" name="username" placeholder="username" id=""><br>
-        <input type="submit" value="Tovább" name="" id="">
+    <form action="/login" method="post" id="login-form">
+        {{ form.csrf_token }}
+        {{ form.name }}
+        <button class="g-recaptcha" 
+        data-sitekey= {{ site_key }}
+        data-callback='onSubmit' 
+        data-action='submit'>Submit</button>
     </form>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+        function onSubmit(token) {
+          document.getElementById("login-form").submit();
+        }
+    </script>
 </body>
 </html>
+
