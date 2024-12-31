@@ -131,14 +131,6 @@
         "documentation": {}
     },
     {
-        "label": "uzenet",
-        "importPath": "test",
-        "description": "test",
-        "isExtraImport": true,
-        "detail": "test",
-        "documentation": {}
-    },
-    {
         "label": "requests",
         "kind": 6,
         "isExtraImport": true,

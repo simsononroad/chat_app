@@ -6,7 +6,6 @@ from form import belepes
 from google_keys import *
 from google.cloud import recaptchaenterprise_v1
 from google.cloud.recaptchaenterprise_v1 import Assessment
-from test import uzenet
 import requests
 
 GOOGLE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
