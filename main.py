@@ -17,7 +17,7 @@ con = sqlite3.connect("data.db")
 cur = con.cursor()
 try:
     cur.execute("CREATE TABLE login_name(id INT PRIMARY KEY ,name)")
-    cur.execute("CREATE TABLE messages(message, sender)")
+    cur.execute("CREATE TABLE messages(id INTEGER PRIMARY KEY AUTOINCREMENT, message, sender)")
     ins = cur.execute(f"insert into login_name (name) values ('admin')")
     con.commit()
 
